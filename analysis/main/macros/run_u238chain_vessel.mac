@@ -1,0 +1,25 @@
+# This macro file generates the entire U-238 decay chain 
+# occuring uniformly throughout the LXe vessel.
+# Only events in the liquid xenon will be kept.
+
+# Keep only events in the liquid xenon
+
+/event/LXeEventsOnly true
+
+# Generate events in the LXe vessel
+
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/halfz 26.6 cm
+/gps/pos/radius 26.6 cm
+/gps/pos/centre 0.0 0.0 0.0 cm
+/gps/pos/confine LXeVessel
+
+# Generate the entire U-238 decay chain
+
+/gps/energy 0 keV
+/gps/particle ion
+/gps/ion 92 238 0 0
+/grdm/analogueMC 1
+
+

@@ -1,0 +1,1 @@
+Provides utility classes and data object classes for EXOAnalysis.

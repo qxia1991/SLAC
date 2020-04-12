@@ -1,0 +1,27 @@
+# This exo script gives an example of visualization of the detector.  For
+# particulars of the visualization commands, see the macro that this script
+# calls, i.e. vis_example.mac 
+load $EXOLIB/plugins/EXOGeant4Module.so
+% Modules to run:
+
+use exosim 
+
+% Configure geant
+
+/exosim/enablevis
+/exosim/macro macros/vis_example.mac 
+
+% Set the number of events to generate 
+
+maxevents 1
+
+% /calibmgr/maccess default
+
+% Run and generate the views 
+
+%show
+begin
+
+% Be sure to stop here, this pauses the program and also gives access to G4 internals.
+/exosim/g4interactive
+exit

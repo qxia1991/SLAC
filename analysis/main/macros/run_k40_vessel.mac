@@ -1,0 +1,25 @@
+# This macro file generates K-40 decays  
+# occuring uniformly throughout the teflon vessel.
+# Only events in the liquid xenon will kept.
+
+# Keep only events in the liquid xenon
+
+/event/LXeEventsOnly true
+
+# Generate events in the teflon vessel
+
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/halfz 26.6 cm
+/gps/pos/radius 26.6 cm
+/gps/pos/centre 0.0 0.0 0.0 cm
+/gps/pos/confine LXeVessel
+
+# Generate K-40
+
+/gps/energy 0 keV
+/gps/particle ion
+/gps/ion 19 40 0 0
+/grdm/analogueMC 1
+
+

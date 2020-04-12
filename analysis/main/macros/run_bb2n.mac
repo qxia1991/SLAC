@@ -1,0 +1,5 @@
+/event/LXeEventsOnly false
+
+#######This generates bb0nX events uniformly throughout the LXe #######
+
+/generator/setGenerator bb2n

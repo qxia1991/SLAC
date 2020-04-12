@@ -1,0 +1,1 @@
+This module hosts EXOAnalysisModules, the workhorses of the EXOAnalysis package.   

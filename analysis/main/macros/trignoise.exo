@@ -1,0 +1,33 @@
+# Load command is necessary to load the exosim modules 
+load $EXOLIB/plugins/EXOGeant4Module.so
+
+% Modules to run:
+
+use exosim digitizer trig
+
+% Configure geant
+
+/exosim/macro macros/noise.mac
+/exosim/initial_seed 27
+
+/digitizer/useRealNoise true
+
+## Set the LXe energy resolutin in sigma ##
+/digitizer/LXeEnergyRes 0.015 
+
+% Specify which shaping times table the digitizer should use
+/digitizer/ElectronicsDBFlavor vanilla
+
+% Set the number of events to generate 
+maxevents 500
+printmodulo 100
+
+/trig/config tmptrig.trg
+/trig/bgWindow 7
+
+% Do analysis
+
+begin
+
+
+exit

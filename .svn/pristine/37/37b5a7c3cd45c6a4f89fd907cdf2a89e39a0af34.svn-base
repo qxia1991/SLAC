@@ -1,0 +1,207 @@
+
+.PHONY: recursive clean all doall $(DIRS) help print_ccflags print_ldflags print_directories print_versions print_check check
+
+all: check doall
+
+top_builddir = ..
+include common.mk
+
+DIRS = utilities/misc 
+ifeq ($(HAVE_MYSQL),yes)
+  DIRS += utilities/database 
+endif
+DIRS += utilities/calib reconstruction 
+ifeq ($(HAVE_GEANT4),yes)
+  DIRS += geant/EXOsim 
+endif
+DIRS += analysis/manager analysis/main 
+ifeq ($(BUILD_DISPLAY),yes)
+  DIRS += consumers/eventdisplay 
+endif
+DIRS += consumers/AComptonImaging
+ifeq ($(BUILD_VIEWER3D),yes)
+  DIRS += consumers/EXO3DViewerGUI 
+endif
+DIRS += analysis/root 
+ifeq ($(HAVE_JNI),yes)
+  DIRS += analysis/jni 
+endif
+ifeq ($(BUILD_PLUGINS),yes)
+  ifeq ($(HAVE_GEANT4),yes)
+    DIRS += geant/exosim_module 
+  endif
+  DIRS += sandbox
+endif
+
+doall: $(prefix)/setup.csh $(prefix)/setup.sh $(bindir)/exo-config
+	@$(MAKE) --no-print-directory TARGET=all recursive
+ifeq ($(shell which EXOAnalysis 2> /dev/null | grep $(prefix)),)
+	@echo "*****************************************************************************"
+	@echo "Don't forget to:"
+	@echo "source $(prefix)/setup.csh     (or source $(prefix)/setup.sh)"
+	@echo "*****************************************************************************"
+endif
+
+check::
+
+clean:
+	@$(MAKE) --no-print-directory TARGET=clean recursive
+	@echo "Start clean of package ........... docs"
+	@ rm -f $(prefix)/setup.csh $(prefix)/setup.sh $(bindir)/exo-config $(bindir)/exo-config_old
+	@rm -rf $(HTMLDOCDIR)/*
+	@echo "End   clean of package ........... docs"
+
+recursive: 
+	@for dir in $(DIRS); do $(MAKE) --no-print-directory -C ../$$dir/make $(TARGET) || exit $$?; done
+
+LIBRARY_SEARCH_PATH := @LIBRARY_SEARCH_PATH@
+doc: 
+ifeq ($(HAVE_ROOT_PYTHON),yes)
+	@echo "    Building docs.............. EXOUtilities"
+	@mkdir -p $(HTMLDOCDIR)
+	@echo "        Building............... Class doc"
+	@cd ../doc && sh wrap_python.sh                                        \
+         gen_module_doc.py $(HTMLDOCDIR) $(LIBDIR) $(top_builddir)             \
+         $(top_builddir)/doc/modules $(PUBLICDIR) $(BUILD_SUBDIRS) > /dev/null   
+	@echo "        Building............... Class Tree structure"
+	@cd ../doc && sh wrap_python.sh                                        \
+         generate_documentation.py basic > $(HTMLDOCDIR)/exo_basic_tree.html   
+	@echo "        Building............... Class Tree commands"
+	@cd ../doc && sh wrap_python.sh                                        \
+         generate_documentation.py html > $(HTMLDOCDIR)/exo_html_tree.html   
+	@echo "        Building............... Class Module documentation"
+	@cd ../doc && sh wrap_python.sh                                        \
+         generate_documentation.py html+ > $(HTMLDOCDIR)/exo_html_mod.html   
+	@echo "        Building............... Tree Alias script" 
+	@cd ../doc && sh wrap_python.sh                                        \
+         generate_documentation.py alias > $(HTMLDOCDIR)/exo_tree_alias.C   
+	@echo "        Building............... Talk-to commands reference" 
+	@cd ../doc && sh wrap_python.sh                                        \
+         generate_talkto_doc.py $(HTMLDOCDIR)/exo_talkto_ref.html $(PLUGINDIR)/*.so 
+ifeq ($(HAVE_GEANT4),yes)
+	@echo "        Building............... EXOSim commands reference" 
+	@cd ../doc && sh wrap_python.sh                                        \
+         generate_exosim_doc.py $(HTMLDOCDIR)/exo_exosim_ref.html              \
+         $(LIBDIR)/libEXOROOT $(PLUGINDIR)/EXOGeant4Module.so > /dev/null 
+endif
+else
+	@$(error Docs can not be built, ROOT installed with python is required)	
+endif
+
+help:
+	@/bin/echo -e                                                         \
+        "Targets are"                                                         \
+      "\n"                                                                    \
+      "\n    all........................ Build all targets"                   \
+      "\n    clean...................... Clean all targets"                   \
+      "\n"                                                                    \
+      "\n    help....................... Print all targets"                   \
+      "\n    print_ccflags.............. Print the compilation flags"         \
+      "\n    print_ldflags.............. Print the load flags"                \
+      "\n    print_versions............. Print the externals versions"        \
+      "\n    print_check................ Check externals configured"          \
+      "\n"                                                                    \
+      "\n By default the output is directed to $(prefix)."                 \
+      "\n The output can be redirected by defining the environment variable"  \
+      "EXOOUT\n"
+
+print_ccflags:
+	@echo $(CCFLAGS)
+
+print_ldflags:
+	@echo $(LDFLAGS)
+
+print_versions:
+	@/bin/echo -e                                        \
+               "\nRoot version............ @ROOTVERSION@"   \
+               "\nMySQL version........... @MYSQL_VERSION@"  \
+               "\nCLHEP version........... @CLHEPVERSION@"  \
+               "\n"
+
+print_check: check
+	@echo "Check OK"
+
+
+
+$(prefix)/setup.csh:
+	@if [ ! -d $(dir $@) ]; then mkdir -p $(dir $@); fi
+	@printf "                                                           \n\
+setenv EXOLIB $(prefix)                                                  \n\
+setenv PATH \$${EXOLIB}/bin:\$${PATH}                                       \n\
+if(! \$${?$(LIBRARY_SEARCH_PATH)} ) then                                    \n\
+  setenv ${LIBRARY_SEARCH_PATH} \$${EXOLIB}/lib                             \n\
+else                                                                        \n\
+  setenv ${LIBRARY_SEARCH_PATH} \$${EXOLIB}/lib:\$${${LIBRARY_SEARCH_PATH}} \n\
+endif                                                                       \n\
+                                                                            \n" > $@
+
+$(prefix)/setup.sh:
+	@if [ ! -d $(dir $@) ]; then mkdir -p $(dir $@); fi
+	@printf "                                                           \n\
+export EXOLIB=$(prefix)                                                  \n\
+export PATH=\$${EXOLIB}/bin:\$${PATH}                                       \n\
+if [ 'x' == 'x\$${$(LIBRARY_SEARCH_PATH)}' ]; then                          \n\
+  export ${LIBRARY_SEARCH_PATH}=\$${EXOLIB}/lib                             \n\
+else                                                                        \n\
+  export ${LIBRARY_SEARCH_PATH}=\$${EXOLIB}/lib:\$${${LIBRARY_SEARCH_PATH}} \n\
+fi                                                                          \n\
+                                                                            \n" > $@
+
+edit = $(SED) \
+	-e 's|@prefix[@]|$(prefix)|g' \
+	-e 's|@exec_prefix[@]|$(exec_prefix)|g' \
+	-e 's|@includedir[@]|$(includedir)|g' \
+	-e 's|@libdir[@]|$(libdir)|g' \
+	-e 's|@CPPFLAGS[@]|$(CPPFLAGS) $(COMMON_INC)|g' \
+	-e 's|@CCFLAGS[@]|$(CCFLAGS)|g' \
+	-e 's|@SVN_REV[@]|$(SVN_REV)|g' \
+	-e 's|@BUILD_ID[@]|$(BUILD_ID)|g' \
+	-e 's|@rootinc[@]|$(ROOT_INCLUDE)|g' \
+	-e 's|@LDFLAGS[@]|$(LDFLAGS)|g' \
+	-e 's|@LIBS[@]|$(LIBS) $(ROOT_LIBS) $(MYSQL_LIBS)|g' \
+	-e 's|@PACKAGE_NAME[@]|$(PACKAGE_NAME)|g' \
+	-e 's|@ECHO_N[@]|$(ECHO_N)|g' \
+	-e 's|@PACKAGE_VERSION[@]|$(PACKAGE_VERSION)|g'
+
+$(bindir)/exo-config: exo-config.in config.mk Makefile
+	@test -z "$(bindir)" || $(mkdir_p) "$(DESTDIR)$(bindir)"
+	@$(edit) exo-config.in >exo-config
+	@$(INSTALL_SCRIPT) exo-config $@
+	@rm -f exo-config
+
+AC_FILES = Makefile config.mk ../doc/wrap_python.sh
+$(AC_FILES): %: %.in $(top_builddir)/make/config.status
+	@echo "Refreshing configure generated files..."
+	$(SILENT)case '$?' in \
+	  *config.status*) $(SHELL) ./config.status ;; \
+	  *)               $(SHELL) ./config.status $@ ;; \
+	esac
+#	@./config.status
+
+$(addsuffix .in,$(AC_FILES)):
+
+# refresh configure
+$(top_builddir)/make/config.status: $(top_builddir)/make/configure
+	$(SILENT)if test -f $@; then \
+	  echo "Running reconfiguration..." ; \
+	  $(SHELL) ./config.status --recheck ; \
+	else \
+	  echo "Configuring build..." ; \
+	  $(SHELL) ./configure ; \
+	fi
+
+EXOSIMDIR=../geant/EXOsim
+fortran_files:
+ifeq ($(strip $(FC)),)
+	@echo "No fortran compiler found, gracefully refusing to setup build for fortran"
+else
+	@$(PYTHON) $(EXOSIMDIR)/make/synchronize_fortran_generators.py $(EXOSIMDIR)/src
+	@echo "If no errors were seen, you are now ready to compile with the fortran generators for exosim"
+	@echo "If you wish to shut off compiling, run 'make fortran_files_clean'" 
+endif
+
+fortran_files_clean:
+	@echo "Cleaning fortran files..."
+	@rm -rf $(EXOSIMDIR)/src/*.f $(EXOSIMDIR)/src/include
+
+

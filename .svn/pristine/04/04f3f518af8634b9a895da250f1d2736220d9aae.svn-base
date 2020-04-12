@@ -1,0 +1,16 @@
+# Calibration Source
+# Cs137  
+
+# 3/30/2011
+# Use this macro to specify the calibration source
+# in run_calibration_source.exo.
+
+# Selects ion (and decay chain, if applicable).
+
+/gps/energy 0 keV
+/gps/particle ion
+/gps/ion 55 137 0 0
+	
+#Don't use Monte Carlo variance reduction (track each particle fully)           
+
+/grdm/analogueMC 1

@@ -1,0 +1,43 @@
+# Calibration Macro
+# 3/30/2011
+
+# This macro configures geant to simulate calibration
+# data with the specified SOURCE at the specified
+# POSITION. For the sake of example, Co60 at P2PZ is 
+# specified. To simulate other sources or positions,
+# change these lines to point at the desired macro in 
+# macros/Calibration_Position and macros/Calibration_Source.
+
+## NOTE
+# Positions are given in TPC coordinates, and
+# only represent the current
+
+################# best guesses #########################
+
+# of the actual positions of the sources. These are given
+# for the convenience of having standardized positions 
+# indicated in the code, and should be periodically checked
+# against the values listed on the Confluence Calibration 
+# page:
+# https://confluence.slac.stanford.edu/display/exo/Calibration 
+
+
+## Some generic commands. 
+
+# Keep only events in the liquid xenon
+
+/event/LXeEventsOnly true
+
+## SOURCE
+
+/control/execute macros/Calibration_Sources/co60.mac
+	
+#Don't use Monte Carlo variance reduction (track each particle fully)           
+
+/grdm/analogueMC 1
+
+
+## POSITION
+
+
+/control/execute macros/Calibration_Positions/P2PZ.mac

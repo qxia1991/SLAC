@@ -1,0 +1,62 @@
+Potential files for EXOsim
+-----------------------------
+
+File:                       Description:
+-----                       ------------
+
+phid.dat.bin                Drift field, default configuration
+phiwx.dat.bin               Weight field, U-wires, default configuration
+phiwy.dat.bin               Weight field, V-wires, default configuration
+phid.default.real.dat.bin   Drift field, 'Real' field configuration
+                            consistent with data taking.  V wires directly
+                            over U wires.
+phid.stagger.real.dat.bin   Drift field, 'Real' field configuration
+                            consistent with data taking.  V wires staggered
+                            over U wires.
+phiwx.stagger.dat.bin       Weight field, U-wires, staggered configuration
+phiwy.stagger.dat.bin       Weight field, V-wires, staggered configuration
+
+phiwx.extended.dat.bin      Weight field, U-wires, extended configuration.
+                            22 channels simulated to expand channels affected.
+phiwy.extended.dat.bin      Weight field, V-wires, extended configuration.
+                            22 channels simulated to expand channels affected.
+
+/// The following description is outdated, we only use binary files at the
+//moment.  M. Marino 29 Nov 2012
+
+As of 1/19/09 (svn repository revision 1623), the three 
+potential files used by EXOsim to calculate the wire signals 
+have been converted from ascii to binary to save disk space. The 
+original files, phid.dat, phiwx.dat, and phiwy.dat, were created 
+by the MAXWELL field simulation software at SLAC. The .dat files 
+have the advantage of being human readable, but they take up 81 
+MB of disk space each time the repository is downloaded. The .dat 
+files still exist in the repository up to revision 1622, so they 
+can be retrieved if necessary. The binary files are called 
+phid.dat.bin, phiwx.dat.bin, and phiwy.dat.bin, and they occupy 
+a total of 13.4 MB.
+
+Two boolean variables have been added to EXODigitizer to control 
+the use of the potential files. To switch between using binary 
+files and ascii files, set "use_binary_potential_files" to true 
+or false in the EXODigitizer constructor. To create new binary 
+files from existing ascii files, set "create_binary_potential_file" 
+to true in the constructor. No function has been written at this 
+time to create an ascii file from a binary file. 
+
+A note about units. The potential values and x-z coordinates in the 
+ascii files are written in units of kV and centimeters, respectively. 
+The EXODigitizer function which reads the ascii files, 
+"read_ascii_potential_file()", multiplies the values read from the 
+file by the appropriate CLHEP unit to account for this. Therefore the 
+values stored in memory are scaled from the values written in the 
+ascii file. For the binary files, no scaling has been done, such that 
+the values are written in the file in units of volts and mm, which are 
+the CLHEP basis units for potential and length. The function which 
+reads the binary files, "read_binary_potential_file()" does not 
+multiply by any units, under the assumption that the values in the 
+file are already correct for CLHEP. However, if a future version of 
+CLHEP were to change the basis units for potential or length (which 
+seems unlikely), this assumption would break down, and the 
+EXODigitizer code will need to be generalized.
+

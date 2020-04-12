@@ -1,0 +1,12 @@
+/event/LXeEventsOnly true
+
+## The event grouping time is 512 mus ## 
+/event/totalEventWindowTime 512
+
+## This is just so all of the actions run
+/gps/pos/centre 0.0 0.0 0.0 cm
+/gps/energy 5. keV
+/gps/particle gamma
+
+
+

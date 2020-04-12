@@ -1,0 +1,43 @@
+load $EXOLIB/plugins/EXOGeant4Module.*
+use exosim digitizer rec risetime uind wiregaindummy v-wiregaindummy cluster gridcorr toutput
+/exosim/SkipEmptyEvents true
+/exosim/initial_seed 0
+/exosim/run_number 0
+/exosim/macro mc.mac
+/digitizer/setDatabaseTime 1348000000
+/digitizer/driftVelocity 0.171
+/digitizer/collectionDriftVelocity 0.2041
+/digitizer/setDigitizationTime 2048 microsecond
+/digitizer/setTriggerTime 1024 microsecond
+/digitizer/LXeEnergyRes 0.0
+/digitizer/wireNoise 800.
+/digitizer/APDNoise 2000.
+/digitizer/applyEmpiricalScalingWires false
+/digitizer/applyEmpiricalScalingAPDs false
+/digitizer/ElectronicsDBFlavor measured_times
+/digitizer/setNumberDigitizedVWireNeighbors 5
+/digitizer/setWeightPotentialFiles phiwx.extended.dat.bin phiwy.extended.dat.bin
+/digitizer/setVShift 0.0
+/rec/LowerFitBoundWire 40
+/rec/UpperFitBoundWire 140
+/rec/ElectronicsDBFlavor measured_times
+/rec/enable_stage multiple_sig_finder true
+/rec/matched_filter_finder/APDSumThresholdFactor 5
+/rec/matched_filter_finder/APDSmoothWindow 4
+/rec/LowerFitBoundWireRestr 20
+/rec/UpperFitBoundWireRestr 30
+/rec/matched_filter_finder/DivideNoise false
+/rec/matched_filter_finder/UserVWireThreshold -1.0
+/rec/matched_filter_finder/VWireThresholdFactor 5.0
+/rec/collection_drift_velocity_mm_per_ns 0.002041
+/cluster/drift_velocity_mm_per_ns 0.00171
+/cluster/ignore_induction True
+/cluster/collection_time 2940
+/gridcorr/gridcorrDBFlavor vanilla
+maxevents 1000
+printmodulo 100
+/toutput/writeSignals false
+/toutput/file output.root
+show
+begin
+exit

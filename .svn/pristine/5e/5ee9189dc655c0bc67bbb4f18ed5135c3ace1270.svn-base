@@ -1,0 +1,18 @@
+// Appending to auto-generated LinkDef.h
+// The following is to ensure that these functions/classes are defined for
+// scripts in ROOT/pyROOT.
+
+#pragma link C++ class EXOScintEventSummary::CCSet+;
+#pragma link C++ class EXOScintEventSummary::PCDSet+;
+#pragma link C++ class EXOScintEventSummary::PCDMap+;
+#pragma link C++ class std::pair<const EXOChargeCluster*,set<const EXOMCPixelatedChargeDeposit*> >+;
+#pragma link C++ class EXOScintEventSummary::PCDMap::*;
+#pragma link C++ class EXOScintEventSummary::PCDSet::*;
+
+#pragma link C++ operators EXOScintEventSummary::PCDMap::iterator;
+#pragma link C++ operators EXOScintEventSummary::PCDMap::const_iterator;
+#pragma link C++ operators EXOScintEventSummary::PCDMap::reverse_iterator;
+#pragma link C++ operators EXOScintEventSummary::PCDSet::iterator;
+#pragma link C++ operators EXOScintEventSummary::PCDSet::const_iterator;
+#pragma link C++ operators EXOScintEventSummary::PCDSet::reverse_iterator;
+

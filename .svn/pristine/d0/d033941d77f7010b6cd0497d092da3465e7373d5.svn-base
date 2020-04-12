@@ -1,0 +1,45 @@
+# Load command is necessary to load the exosim modules 
+load $EXOLIB/plugins/EXOGeant4Module.so
+
+% Modules to run:
+use exosim digitizer rec cluster toutput
+
+% Configure geant
+/exosim/macro macros/run_bb0n.mac
+
+## Set the noise level for the wire signals (RMS electrons) ##
+/digitizer/wireNoise 800.0
+/digitizer/APDNoise 2000.0
+
+## Set the LXe energy resolutin in sigma ##
+/digitizer/LXeEnergyRes 0.015 
+
+## Uncomment this line to set the electron lifetime
+#/digitizer/electronLifetime 100 microsecond
+
+% Specify which shaping times table the digitizer should use
+/digitizer/ElectronicsDBFlavor vanilla
+
+% Specify which shaping times table reconstruction should use
+/rec/ElectronicsDBFlavor vanilla
+/rec/enable_stage multiple_sig_finder true
+
+% Set the number of events to generate 
+maxevents 100
+printmodulo 10
+
+% Output file name
+
+/toutput/file bb0n.root
+/toutput/writeSignals true
+
+% Uncomment when working remotely
+% to turn off database access
+% /calibmgr/maccess default
+
+
+% Do analysis
+
+show
+begin
+exit

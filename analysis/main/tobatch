@@ -1,0 +1,30 @@
+#! /bin/csh -f
+
+#############################################################
+
+# Will send all files with given root to xlong batch
+
+# Usage: tobatch rootname
+# rootname doesn't include the _0, _1, etc. at the end of each macro file
+
+#############################################################
+
+foreach name ( $argv )
+
+
+@ var=0  
+# Sending each job to the batch
+while (1)
+bsub -qxlong EXOAnalysis $1_$var.exo
+@ var += 1
+if (! -f $1_$var.exo) then
+   echo "$var files sent to batch"
+    break
+endif
+end
+
+
+exit 0
+
+
+

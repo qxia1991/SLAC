@@ -1,0 +1,21 @@
+# Choose the second for a linux file
+load $EXOLIB/plugins/*
+
+use input test test_two
+# This command will succeed
+usemoduleas test_two test_two_alias 
+# Tjis command will fail
+usemoduleas test test_alias 
+usemoduleas test 
+use evsel
+
+/input/file test_root_file.root
+
+/test_two/myloggedname TestTwo
+/test_two_alias/myloggedname TestTwoAlias
+/evsel/in_ul 100
+
+
+show
+begin
+exit

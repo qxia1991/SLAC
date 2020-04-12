@@ -1,0 +1,15 @@
+Provides reference for the offline software.  Along
+with the documentation accessible through the module
+links, there are several other automatically generated
+sets of documentation of interest, including:<br><br>
+
+<a href="exo_basic_tree.html">Basic EXO ROOT Tree information</a>: information about the layout of the Tree in EXO data files. <br>
+
+<a href="exo_html_mod.html">EXOEventData information for programmers</a>: EXOEventData info for those people using the class in a script or in a program. <br>
+
+<a href="exo_html_tree.html">EXOEventData information for Draw commands</a>: EXOEventData info for performing TTree Draw commands. <br>
+
+<a href="exo_talkto_ref.html">TalkTo command information</a>: List of available commands when using the EXOAnalysis program. <br>
+
+<a href="exo_exosim_ref.html">EXOSim command information</a>: List of available commands for EXOSim. <br>
+

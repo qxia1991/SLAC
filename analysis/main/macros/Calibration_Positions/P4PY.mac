@@ -1,0 +1,15 @@
+# Calibration Position
+# P4PY  ("Station Number" S11)
+
+# 3/30/2011
+# Use this macro to specify the source position 
+# in run_calibration_source.exo.
+
+# This file and others in this directory 
+# contain the best-known coordinates of the
+# calibration positions, as listed on Confluence.
+# https://confluence.slac.stanford.edu/display/exo/Calibration.
+
+# Coordinates are listed as (X, Y, Z) relative to the TPC.
+
+/gps/position 0.0 20.4 0.0

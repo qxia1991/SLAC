@@ -1,0 +1,83 @@
+# Sandbox Makefile.inc M. Marino Nov 2010
+#
+##########################################################
+# You probably should not be editing this file.
+# If you are making a module, please refer to 
+# offline/sandbox/make/Makefile for instructions.
+# But, MEDDLE YE NOT IN WHAT YE KNOW NOT.
+##########################################################
+
+
+DEPENDLIB    += EXOAnalysisManager
+
+PKGROOT     := $(shell cd ../; pwd)
+
+.PHONY: all doall clean print_start
+
+all: plugins_built 
+
+include $(top_builddir)/make/common.mk
+PLUGINLIBS = $(addprefix $(PLUGINDIR)/, $(addsuffix .$(DllSuf), $(basename $(notdir $(BASECCS)))))
+DICTOBJECTS = $(foreach cc,$(basename $(notdir $(BASECCS))),$(BUILDDIR)/$(cc)dict.o)
+DICTCS = $(DICTOBJECTS:.o=.$(CSuf))
+LINKDEFS = $(patsubst %dict.o,%_LinkDef.$(HSuf), $(DICTOBJECTS))
+
+ifneq ("$(MAKECMDGOALS)", "clean")
+-include $(BUILDDIR)/*.d
+endif
+
+doall: $(PLUGINDIR) $(BUILDDIR) $(DEPCCFILES) $(PLUGINLIBS) 
+
+plugins_built: doall
+	@echo ""
+	@echo "The following plugins exist:"
+	@for plugin in $(PLUGINLIBS); do printf "   $$plugin\n"; done
+	@echo ""
+
+$(DEPCCFILES) : $(BUILDDIR)/%.d : $(SOURCEDIR)/%.$(CCSuf)
+	@echo "    Update dependencies........ $(<F)"
+	$(SILENT)set -e; rm -f $@; \
+	$(CC) $(CCFLAGS) -MM $(INCLUDE) $< > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,$(BUILDDIR)/\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+
+$(LINKDEFS) : $(BUILDDIR)/%_LinkDef.h: $(SOURCEDIR)/%.$(HHSuf) 
+	@echo "    Auto-making Linkdef........ $(@F)"
+	$(SILENT)echo "#pragma link C++ defined_in \"$<\";" > $@
+
+$(DICTCS) : $(BUILDDIR)/%dict.$(CSuf): $(SOURCEDIR)/%.$(HHSuf) $(BUILDDIR)/%_LinkDef.$(HSuf)  
+	@echo "    Running rootcint........... $(basename $(notdir $<))"
+	$(SILENT)$(ROOTCINT) -f $@ -c $(INCLUDE) -p $(ROOTCINTDEFS) $^
+
+$(DICTOBJECTS): $(BUILDDIR)/%.o : $(BUILDDIR)/%.$(CSuf)
+	@echo "    Building dictionary........ $(<F)"
+	$(SILENT)$(CC) $(CCFLAGS) -c $(INCLUDE) -o $@ $<
+
+ifneq "$(MAKECMDGOALS)" "clean"
+-include $(BUILDDIR)/*.d
+endif
+
+$(BASECCO): $(BUILDDIR)/%.o : $(SOURCEDIR)/%.$(CCSuf)
+	@echo "    Compile.................... $(<F)"
+	$(SILENT)$(CC) -c $(INCLUDE) $(CCFLAGS) -o $@ $<
+
+$(PLUGINLIBS): $(PLUGINDIR)/%.$(DllSuf) : $(BUILDDIR)/%.o $(BUILDDIR)/%dict.o
+	@echo "    Build plugin............... $(@)"
+	$(SILENT)$(LD) $^ $(SOFLAGS)$(@F) $(LDFLAGS) -o $@ 
+ifneq ($(DllSuf),so)
+	$(SILENT)ln -s -f $(@F) $(basename $@).so  
+endif
+
+$(PLUGINDIR):
+	$(SILENT)mkdir -p $(PLUGINDIR)
+
+$(BUILDDIR):
+	$(SILENT)mkdir -p $(BUILDDIR)
+
+clean:
+	@echo "Start clean of plugin ............ $(PKGNAME)"
+	$(SILENT)rm -rf $(BUILDDIR)
+	$(SILENT)rm -rf $(PLUGINLIBS)
+	@echo "End   clean of plugin ............ $(PKGNAME)"
+
+

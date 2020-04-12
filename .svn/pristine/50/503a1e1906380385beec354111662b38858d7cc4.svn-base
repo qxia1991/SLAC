@@ -1,0 +1,61 @@
+
+# change digitizer window to be 2048 microseconds
+/event/totalEventWindowTime 2048.0 microsecond
+
+# write only events that have energy deposited in the LXe
+/event/LXeEventsOnly true
+
+###########Event generator###########
+#Muons
+
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/centre 0.0 100.0 0.0 cm
+/gps/pos/radius 300.0 cm
+/gps/pos/rot1 1. 0. 0.
+/gps/pos/rot2 0. 0. 1.
+
+/gps/ang/type user
+/gps/direction 0.0 -1.0 0.0
+/gps/hist/type theta
+/gps/hist/point 0. 0.
+/gps/hist/point 0.1 0.305172065363658
+/gps/hist/point 0.2 0.5819869598271
+/gps/hist/point 0.3 0.805086772020129
+/gps/hist/point 0.4 0.954867600809156
+/gps/hist/point 0.5 1.01975585150936
+/gps/hist/point 0.6 0.997790605208043
+/gps/hist/point 0.7 0.897317048336311
+/gps/hist/point 0.8 0.736607761607163
+/gps/hist/point 0.9 0.54221411149721
+/gps/hist/point 1.0 0.345782793850582
+/gps/hist/point 1.1 0.178931368503103
+/gps/hist/point 1.2 0.0656497684257384
+/gps/hist/point 1.3 0.0123333623149834
+/gps/hist/point 1.4 0.000415133588286527
+/gps/hist/point 1.5 0.00000000313308042114136
+
+
+/gps/ene/type User
+/gps/hist/type energy
+/gps/hist/point 0.0 0.0
+/gps/hist/point 250.0 0.00033 
+/gps/hist/point 500.0 0.00034
+/gps/hist/point 750.0 0.00041
+/gps/hist/point 1000.0 0.00029
+/gps/hist/point 2500.0 0.00029
+/gps/hist/point 5000.0 0.00026
+/gps/hist/point 7500.0 0.00026
+/gps/hist/point 10000.0 0.00023
+/gps/hist/point 25000.0 0.00019
+/gps/hist/point 50000.0 0.00013
+/gps/hist/point 75000.0 0.00011
+/gps/hist/point 100000.0 0.000091
+/gps/hist/point 250000.0 0.000016
+/gps/hist/point 500000.0 0.0000041
+/gps/hist/point 750000.0 0.0000011
+/gps/hist/point 1000000.0 0.0
+
+/gps/particle mu-
+
+/grdm/analogueMC 1

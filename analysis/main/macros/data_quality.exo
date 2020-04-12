@@ -1,0 +1,31 @@
+# Load command is necessary to load the exosim modules 
+load $EXOLIB/plugins/EXOGeant4Module.so
+
+% Modules to run:
+use exosim digitizer rec cluster dataqual
+
+% Configure geant
+/exosim/macro macros/run_u238chain_lxe.mac
+
+# Set the electronic noise and LXe energy resolution #
+/digitizer/wireNoise 800.000000
+/digitizer/APDNoise 2000.000000
+/digitizer/LXeEnergyRes 0.015000
+
+% Specify which shaping times table the digitizer should use
+/digitizer/ElectronicsDBFlavor vanilla
+
+% Specify which shaping times table reconstruction should use
+/rec/ElectronicsDBFlavor vanilla
+/rec/enable_stage multiple_sig_finder true
+
+% Set the number of events to generate 
+maxevents 10000
+printmodulo 1000
+printmemory true
+
+% Do analysis
+
+show
+begin
+exit

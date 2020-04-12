@@ -1,0 +1,54 @@
+// Appending to auto-generated LinkDef.h
+#pragma link C++ class vector<EXOTalkToManager::TalkToCommand>+;
+
+// Disable I/O support for EXOErrorLogger and EXOErrorLogger::LoggedError, so that ROOT won't require a default constructor.
+// These commands override the auto-generated ones.
+#pragma link C++ class EXOErrorLogger-!;
+#pragma link C++ class EXOErrorLogger::LoggedError-!;
+
+// Disable Stream creation for EXOTRefArray
+#pragma link C++ class EXOTRefArray-;
+
+// The following is to ensure that these functions/classes are defined for
+// scripts in ROOT/pyROOT.
+#pragma link C++ class EXOTemplWaveform<Double_t>+;
+#pragma link C++ class EXOTemplWaveform<Float_t>+;
+#pragma link C++ class EXOTemplWaveform<Int_t>+;
+#pragma link C++ class EXOTemplWaveform<complex<double> >+;
+#pragma link C++ class EXOTemplWaveform<unsigned long>+;
+#pragma link C++ class EXOTemplWaveform<unsigned int>+;
+#pragma link C++ class EXOTemplWaveform<Char_t>+;
+// The following should not be necessary, but somehow is to remove warning
+// messages saying a dictionary doesn't exist.  This is due to a member
+// variable in EXOMonteCarloData that does not get saved to disk and is
+// protected, so should never need to be accessed by a dictionary.  
+// FixME M. Marino
+#pragma link C++ class pair<Long64_t, Int_t >+;
+#pragma link C++ class pair<string, string >+;
+//
+#pragma link C++ function EXOTemplWaveform<Int_t>::Convert<Double_t>;
+#pragma link C++ function EXOTemplWaveform<Int_t>::Convert<Float_t>;
+#pragma link C++ function EXOTemplWaveform<Double_t>::Convert<Int_t>;
+#pragma link C++ function EXOTemplWaveform<Float_t>::Convert<Int_t>;
+#pragma link C++ function EXOTemplWaveform<Double_t>::StdDevSquared<Double_t>;
+#pragma link C++ function EXOTemplWaveform<Double_t>::SetData<EXOTemplWaveform<Int_t> >(const EXOTemplWaveform<Int_t>&, size_t, size_t);
+
+#pragma link C++ function EXOControlRecordList::GetNextRecord<EXOControlRecord>;
+#pragma link C++ function EXOControlRecordList::GetPreviousRecord<EXOControlRecord>;
+#pragma link C++ function EXOControlRecordList::GetNextRecord<EXOBeginRecord>;
+#pragma link C++ function EXOControlRecordList::GetPreviousRecord<EXOBeginRecord>;
+#pragma link C++ function EXOControlRecordList::GetNextRecord<EXOEndRecord>;
+#pragma link C++ function EXOControlRecordList::GetPreviousRecord<EXOEndRecord>;
+
+#pragma link C++ class EXORunInfo::RunList;
+#pragma link C++ class EXORunInfo::RunList::iterator;
+
+#pragma link C++ class EXORunInfoManager::DRIList;
+#pragma link C++ class EXORunInfoManager::DRIList::iterator;
+
+// Request STL instantiations for EXONoiseCorrelations.
+#pragma link C++ class map<UChar_t, UChar_t>+;
+#pragma link C++ class pair<UChar_t, UChar_t>+;
+#pragma link C++ class vector<EXONoiseCorrelations::SymmetricMatrix>+;
+#pragma link C++ class vector<EXONoiseCorrelations::GeneralMatrix>+;
+

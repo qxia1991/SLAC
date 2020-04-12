@@ -1,0 +1,116 @@
+/event/LXeEventsOnly true
+
+#######This generates bb0n events uniformly throughout the LXe #######
+
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+/vis/visualization true
+
+
+# Select on of the visualization modules.  *NOTE* G4 needs to be compiled
+# against whatever the chosen module is.  The following selections are just
+# that, it is possible that G4 has other options.  
+#
+# VRML outputs an xml file that is readable by many viewers (including Acrobat
+# Pro to make a 3D PDF)
+/vis/open VRML2FILE
+#
+# OpenInventor is by far the most useful for direct interaction with the geometry
+#/vis/open OIX
+#
+# OpenGL, views, etc. must be changed from the command line 
+#/vis/open OGLIX
+#
+# OpenGL with Motif, this can sometimes have issues 
+#/vis/open OGLIXm
+#
+# OpenGL with Qt
+#/vis/open OGLIQt
+#
+# Make a HepRepFile for view with an external viewer 
+#/vis/open HepRepFile
+#
+# RayTracer makes fantastic pictures, but is computationally intensive.  You
+# should instead use another viewer to figure out the correct angles/volumes to
+# view and then use RayTracer.
+#/vis/open RayTracerX
+
+/vis/viewer/set/autoRefresh false
+/vis/drawVolume 
+
+##############################################################################
+# Set information for the source, in this case it's a Th228 source. The
+# positions are optimized for viewing engines that only allow interaction with
+# the geometry via the command line.
+/gps/particle ion
+/gps/ion 90 228 0 0 
+
+# S11 source position
+#/vis/viewer/set/viewpointThetaPhi 10. 0.
+#/gps/position 0.0 25.4 6.7
+
+# S17 source position
+#/vis/viewer/set/viewpointThetaPhi 0. 90.
+#/gps/position 0.0 -25.4 -3.3
+
+# S5 source position
+#/vis/viewer/set/viewpointThetaPhi 80. 70.
+#/gps/position 25.4 0.0 -1.1
+
+# S2 source position
+#/vis/viewer/set/viewpointThetaPhi 90. 90.
+#/gps/position -1.0 1.2 -30.4
+# S8
+/vis/viewer/set/viewpointThetaPhi 90. 90.
+/gps/position 3.7 0.0 30.4
+##############################################################################
+
+##############################################################################
+# Set everything to be visible
+/vis/geometry/set/visibility LeadShield        0 1
+/vis/geometry/set/visibility Field_Ring        0 1
+/vis/geometry/set/visibility Field_Ring_Lip    0 1
+/vis/geometry/set/visibility APDFrame          0 1
+/vis/geometry/set/visibility CathodeRing       0 1
+/vis/geometry/set/visibility Cathode           0 1
+/vis/geometry/set/visibility ActiveLXe         0 1 
+/vis/geometry/set/visibility InactiveLXe       0 1 
+/vis/geometry/set/visibility LXeVessel         0 1 
+/vis/geometry/set/visibility Reflector         0 1 
+/vis/geometry/set/visibility OuterCryo         0 1 
+/vis/geometry/set/visibility InnerCryo         0 1 
+/vis/geometry/set/visibility VacuumGap         0 1 
+/vis/geometry/set/visibility HFE               0 1 
+/vis/geometry/set/visibility Source_Tube_PX    0 1 
+/vis/geometry/set/visibility Source_Tube_PY    0 1 
+/vis/geometry/set/visibility Source_Tube_NY    0 1 
+/vis/geometry/set/visibility In_Source_Tube_PX 0 1 
+/vis/geometry/set/visibility In_Source_Tube_PY 0 1 
+/vis/geometry/set/visibility In_Source_Tube_NY 0 1 
+/vis/geometry/set/visibility Resistor_Block    0 1 
+/vis/geometry/set/visibility APD               0 1 
+/vis/geometry/set/visibility logicWireSupport  0 1 
+/vis/geometry/set/visibility logicAnode        0 1 
+
+# Set some colors here
+/vis/geometry/set/colour InactiveLXe 0 0 1 0 0.5
+/vis/geometry/set/colour ActiveLXe   0 1 1 0 0.5  
+/vis/geometry/set/colour LXeVessel   0 0 0 1 0.5  
+
+# Make everything be a solid instead of a wireframe since it is easier to see.
+/vis/geometry/set/forceSolid InactiveLXe 0 1    
+/vis/geometry/set/forceSolid ActiveLXe   0 1      
+/vis/geometry/set/forceSolid LXeVessel   0 1      
+/vis/geometry/set/forceSolid Field_Ring  0 1
+/vis/geometry/set/forceSolid APDFrame    0 1
+/vis/geometry/set/forceSolid CathodeRing 0 1
+/vis/geometry/set/forceSolid Cathode 0 1
+/vis/geometry/set/forceSolid Reflector 0 1
+#/vis/geometry/set/forceSolid APD 0 1
+#/vis/geometry/set/forceSolid logicWireSupport 0 1 
+#/vis/geometry/set/forceSolid logicAnode 0 1 
+##############################################################################
+
+/vis/viewer/rebuild
+/vis/viewer/set/autoRefresh true

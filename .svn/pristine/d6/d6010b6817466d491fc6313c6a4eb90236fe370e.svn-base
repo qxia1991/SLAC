@@ -1,0 +1,58 @@
+EXOROOT provides a library to access almost all of EXOAnalysis internals easily
+from a ROOT script or a pyROOT script.  In addition, the EXOROOT namespace
+provides several convenience functions for accessing these functions, more
+details can be found on that page.  What is important is that the call:
+
+gSystem->Load("libEXOROOT");
+
+or 
+
+ROOT.gSystem.Load("libEXOROOT")
+
+makes all of the libraries/classes from EXOROOT accessible.  To get access to plugins, see 
+
+What this means is that, in a ROOT script, you could simply have
+the following python code:
+
+    import ROOT
+    
+    ROOT.gSystem.Load("libEXOROOT")
+    
+    rec = ROOT.EXOReconstructionModule()
+    rec.set_ATeam_YMatch_flag(True)
+    rec.set_pattern_recognition_flag(4)
+    rec.SetVerbose(True)
+    
+    afile = ROOT.TFile("test.root")
+    tree = afile.Get(ROOT.EXOMiscUtil.GetEventTreeName())
+    
+    tree.GetEntry(0)
+    event = tree.EventBranch
+    event.GetWaveformData().Decompress()
+    
+    rec.Initialize()
+    rec.BeginOfRun(event)
+
+It would look like the following in CINT:
+
+  int myScript ()
+  {
+    gSystem->Load("libEXOROOT");
+    EXOReconstructionModule rec;
+    rec.set_ATeam_YMatch_flag(true);
+    rec.set_pattern_recognition_flag(4);
+    rec.SetVerbose(True);
+    
+    TFile afile("test.root");
+    TTree *tree = (TTree*)afile.Get(EXOMiscUtil::GetEventTreeName());
+    
+    EXOEventData* event = 0;
+    tree->SetBranchAddress(EXOMiscUtil::GetEventBranchName());
+    tree->GetEntry(0);
+    event->GetWaveformData()->Decompress();
+    
+    rec.Initialize();
+    rec.BeginOfRun(event);
+ 
+  }
+

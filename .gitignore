@@ -1,0 +1,117 @@
+tags
+
+# /analysis/main/
+/analysis/main/build
+
+# /analysis/main/make/
+/analysis/main/make/.config
+
+# /analysis/manager/
+/analysis/manager/build
+
+# /analysis/manager/make/
+/analysis/manager/make/.config
+
+# /analysis/python/
+/analysis/python/build*
+/analysis/python/PyEXOAnalysis.py
+/analysis/python/PyEXOAnalysis_interface_wrap.cpp
+/analysis/python/PyEXOAnalysis_interface_wrap.h
+
+# /analysis/python/src/
+/analysis/python/src/PyEXOAnalysis.py
+/analysis/python/src/PyEXOAnalysis_interface_wrap.cpp
+/analysis/python/src/PyEXOAnalysis_interface_wrap.h
+
+# /analysis/rootanalysis/
+/analysis/rootanalysis/build
+
+# /analysis/rootanalysis/make/
+/analysis/rootanalysis/make/.config
+
+# /consumers/3DViewer/
+/consumers/3DViewer/build
+
+# /consumers/eventdisplay/
+/consumers/eventdisplay/build
+
+# /consumers/eventdisplay/make/
+/consumers/eventdisplay/make/.config
+
+# /geant/
+/geant/.config
+/geant/build*
+
+# /geant/EXOsim/
+/geant/EXOsim/build
+
+# /geant/EXOsim/make/
+/geant/EXOsim/make/.config
+
+# /geant/exosim_module/
+/geant/exosim_module/build
+/geant/exosim_module/*.config
+
+# /geant/exosim_module/make/
+/geant/exosim_module/make/.config
+
+# /geant/standalone/make/
+/geant/standalone/make/.config
+
+# /analysis/standalone
+/analysis/standalone/myapp
+/analysis/standalone/myapp.o
+
+# /make/
+/make/.config
+
+# /reconstruction/
+/reconstruction/build
+
+# /reconstruction/make/
+/reconstruction/make/.config
+
+# /sandbox/
+/sandbox/build*
+
+# /sandbox/make/
+/sandbox/make/.config
+
+# /utilities/calib/
+/utilities/calib/build
+
+# /utilities/calib/make/
+/utilities/calib/make/.config
+
+# /utilities/database/
+/utilities/database/build
+
+# /utilities/database/make/
+/utilities/database/make/.config
+
+# /utilities/misc/
+/utilities/misc/build
+
+# /utilities/misc/make/
+/utilities/misc/make/.config
+
+/analysis/root/build
+
+/doc/*.pyc
+/doc/wrap_python.sh
+
+build
+
+.DS_Store
+make/config.status
+make/config.log
+make/config.h
+make/config.mk
+make/.config*
+make/Makefile
+make/Makefile.common
+make/autom4te*
+make/libtool
+*.swp
+*.pyc
+*~

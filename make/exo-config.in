@@ -1,0 +1,124 @@
+#!/bin/sh
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+includedir=@includedir@
+libdir=@libdir@
+cflags=`cat <<EOF
+@CPPFLAGS@ @CCFLAGS@
+EOF
+`
+cflags=`echo " $cflags" | sed -e 's/\([*\?]\)/\\\\\1/g; s/(/"(/g; s/)/)"/g' `
+cflags2=`echo " $cflags" | sed -e 's/\(["()*\?]\)/\\\\\1/g'`
+ldflags="@LDFLAGS@ @LIBS@"
+all_libs=`cd $libdir; for i in lib*.so; do printf "%s " "$i" | sed 's|^lib\(.*\)\.so$|-l\1 |'; done`
+valid_libs='EXOAnalysisManager EXOBinaryPackage EXOComptonImager EXOCalibUtilities EXODBUtilities EXOReconstruction EXOUtilities EXOTest'
+sel_libs=`cd $libdir; for i in $valid_libs; do test -e "lib$i.so" && printf "%s " "-l$i"; done`
+
+usage()
+{
+    cat <<EOF
+Usage: exo-config [OPTION]
+
+Available values for OPTION include:
+
+  --help             display this help and exit
+  --prefix           install prefix
+  -i, --incflags     include flags for compilation against EXOAnalysis
+  -o, --onlyincflags *only* EXOAnalysis include flags
+  -l, --libflags     linking flags, this includes ROOT and (maybe) mysql libs)
+  -n, --onlylibflags *only* linking flags for EXOAnalysis libs
+  --incdir           directory with header files
+  --cflags           pre-processor and compile flags required for build
+  --libdir           directory with library files
+  --libs             link flags required for build
+  --version          output version information
+  --svn_rev          output svn revision number 
+  --build_id         output build id 
+EOF
+
+    exit $1
+}
+
+if test $# -eq 0; then
+    usage 1
+fi
+
+while test $# -gt 0; do
+    case "$1" in
+    # this deals with options in the style
+    # --option=value and extracts the value part
+    # [not currently used]
+    -*=*) value=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+    *) value= ;;
+    esac
+
+    case "$1" in
+
+    --prefix)
+        echo "$prefix"
+        ;;
+
+    --version)
+        echo @PACKAGE_NAME@ @PACKAGE_VERSION@
+        exit 0
+        ;;
+
+    --svn_rev)
+        echo @SVN_REV@
+        exit 0
+        ;;
+
+    --build_id)
+        echo @BUILD_ID@
+        exit 0
+        ;;
+
+    --help)
+        usage 0
+        ;;
+
+# old-fashion
+    -i|--incflags)
+        echo " $cflags -I@includedir@"
+        ;;
+
+    -o|--onlyincflags)
+        echo "-I@includedir@"
+        ;;
+
+    -l|--libflags)
+        echo "-L@libdir@ $sel_libs $ldflags"
+        ;;
+
+    -n|--onlylibflags)
+        echo "-L@libdir@ $sel_libs"
+        ;;
+
+# follow pkg-config way
+    --incdir)
+        echo "@includedir@"
+        ;;
+
+    --cflags)
+        echo " -I@includedir@ @rootinc@"
+        ;;
+
+    --libdir)
+        echo "@libdir@"
+        ;;
+
+    --libs)
+        echo " -L@libdir@ -lEXOUtilities"
+        ;;
+
+    *)
+        echo "unknown option: $1"
+        usage 1
+        ;;
+    esac
+    shift
+done
+
+exit 0
+
